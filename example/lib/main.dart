@@ -18,10 +18,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
   String _log = 'output:\n';
-  final _apiKey = TextEditingController();
-  final _cluster = TextEditingController();
-  final _channelName = TextEditingController();
-  final _eventName = TextEditingController();
+  final _apiKey =
+      TextEditingController(text: "75e5d2b6-fbd2-4b38-9a22-3652d2833b0d");
+  final _cluster = TextEditingController(text: "mt1");
+  final _channelName = TextEditingController(text: "private-chatroom-1");
+  final _eventName = TextEditingController(text: "newMessage");
+
+  //test-channel , test-event
   final _channelFormKey = GlobalKey<FormState>();
   final _eventFormKey = GlobalKey<FormState>();
   final _listViewController = ScrollController();
@@ -51,27 +54,35 @@ class _MyAppState extends State<MyApp> {
     // Remove keyboard
     FocusScope.of(context).requestFocus(FocusNode());
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("apiKey", _apiKey.text);
-    prefs.setString("cluster", _cluster.text);
-    prefs.setString("channelName", _channelName.text);
+    prefs.setString("apiKey", "75e5d2b6-fbd2-4b38-9a22-3652d2833b0d");
+    prefs.setString("cluster", "mt1");
+    prefs.setString("channelName", "private-chatroom-1");
 
     try {
       await pusher.init(
-        apiKey: _apiKey.text,
-        cluster: _cluster.text,
-        onConnectionStateChange: onConnectionStateChange,
-        onError: onError,
-        onSubscriptionSucceeded: onSubscriptionSucceeded,
-        onEvent: onEvent,
-        onSubscriptionError: onSubscriptionError,
-        onDecryptionFailure: onDecryptionFailure,
-        onMemberAdded: onMemberAdded,
-        onMemberRemoved: onMemberRemoved,
-        onSubscriptionCount: onSubscriptionCount,
-        // authEndpoint: "<Your Authendpoint Url>",
-        // onAuthorizer: onAuthorizer
-      );
-      await pusher.subscribe(channelName: _channelName.text);
+          apiKey: "75e5d2b6-fbd2-4b38-9a22-3652d2833b0d",
+          cluster: "mt1",
+          onConnectionStateChange: onConnectionStateChange,
+          onError: onError,
+          onSubscriptionSucceeded: onSubscriptionSucceeded,
+          onEvent: onEvent,
+          onSubscriptionError: onSubscriptionError,
+          onDecryptionFailure: onDecryptionFailure,
+          onMemberAdded: onMemberAdded,
+          onMemberRemoved: onMemberRemoved,
+          onSubscriptionCount: onSubscriptionCount,
+          host: "soketi.migworld.net",
+          authEndpoint: "https://migworld.net/broadcasting/auth",
+          useTLS: false,
+          wsPort: 6001,
+          wssPort: 6001,
+          authParams: {
+            "headers": {
+              "Authorization":
+                  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMWY4MGIwZmIyNDJjMmUxYzAyNmQzOTE0NjIxZGY3ODRlZDZlODJjZDdjYTI3ZjQ0NGM3ZGE4OTMzODdkODE5NGU0YzhjMTIzOTFiMjEyMmUiLCJpYXQiOjE3MDk4NzYxOTQuMjI1Mjg4LCJuYmYiOjE3MDk4NzYxOTQuMjI1MjkyLCJleHAiOjE3NDE0MTIxOTQuMjIwMTAxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.SErt0nc6vgQpfxHoC3WsLO80WcNTMFC6_R7i6fA8wDepUdlUI3uMvmr5pk3zspuFe6QByrAu7KNV3xWwmRfUPThjupwYIL-LZUjFER54Bx9xrEMOql1sVMjE8K5ZH-aPHPLmB82Lol_kLPrxaUGcF_kEPjMSNZkYfCI46DRGtUq1vpfmxzGiNsILFjp1nFiTRb5aVxX5rvITYJsidhdyjxKGWobXDfHW_bnCdkAZQTvidjRSR0UYd0wiVmBucVtn-dG3NLWiQBQRdglLSqs-fpK0K-mHuPNy_bir-TpY-l6El4ZC39rqKi67mhdVCTedzjkv2rSpgZdQkYaZ5c9609Zq4iAT-XfXfHDZHCbcuojUi6U0_RHBipgDtwEFhdy8JGu61YEYYLyrJPtXc_QsBXG4uAfwCW_SFi12wcjpCvi7PX9U4kVYHu1XtQUy2r1TAKG4_8MQs40bFSoLuGv42POZq9hbpQhgI3QTSkfQWEPb2a222HSqy2XJItFq9fu1d8l3BrtfQ7oLaR7p6pNZRTHC-B9E2OlK6SU4MgcJPwyx_N-a9VV6rOxsPeD8xhovXm8s40mt5UYzDNqTk11gap9-8lxbFP3ZA8DVv4N3jALlGsnS4w8aKZGJGCzdrrFlDRnM8ENeRbRDVGc24YGV0s6xEqLUlDczvP0aZm2VFmw"
+            }
+          });
+      await pusher.subscribe(channelName: "private-chatroom-1");
       await pusher.connect();
     } catch (e) {
       log("ERROR: $e");
@@ -97,7 +108,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void onSubscriptionError(String message, dynamic e) {
-    log("onSubscriptionError: $message Exception: $e");
+    log("onSubscriptionError: $message Exception: ${e.toString()}");
   }
 
   void onDecryptionFailure(String event, String reason) {
@@ -131,11 +142,11 @@ class _MyAppState extends State<MyApp> {
       return;
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("eventName", _eventName.text);
+    prefs.setString("eventName", "newMessage");
     prefs.setString("data", _data.text);
     pusher.trigger(PusherEvent(
-        channelName: _channelName.text,
-        eventName: _eventName.text,
+        channelName: "private-chatroom-1",
+        eventName: "newMessage",
         data: _data.text));
   }
 
@@ -147,10 +158,10 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _apiKey.text = prefs.getString("apiKey") ?? '';
-      _cluster.text = prefs.getString("cluster") ?? 'eu';
-      _channelName.text = prefs.getString("channelName") ?? 'my-channel';
-      _eventName.text = prefs.getString("eventName") ?? 'client-event';
+      _apiKey.text = "75e5d2b6-fbd2-4b38-9a22-3652d2833b0d";
+      _cluster.text = "mt1";
+      _channelName.text = "private-chatroom-1";
+      _eventName.text = "newMessage";
       _data.text = prefs.getString("data") ?? 'test';
     });
   }
@@ -162,7 +173,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text(pusher.connectionState == 'DISCONNECTED'
               ? 'Pusher Channels Example'
-              : _channelName.text),
+              : "private-chatroom-1"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
