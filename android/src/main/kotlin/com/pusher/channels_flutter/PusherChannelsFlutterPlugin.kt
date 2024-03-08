@@ -115,8 +115,15 @@ class PusherChannelsFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
                 call.argument("maxReconnectionAttempts")!!
             if (call.argument<Int>("maxReconnectGapInSeconds") != null) options.maxReconnectGapInSeconds =
                 call.argument("maxReconnectGapInSeconds")!!
-            if (call.argument<String>("authEndpoint") != null) options.channelAuthorizer =
-                HttpChannelAuthorizer(call.argument("authEndpoint"))
+
+            if (call.argument<String>("authEndpoint") != null){
+                val authorize = HttpChannelAuthorizer(call.argument("authEndpoint"))
+                if (call.argument<Map<String, String>>("authHeaders") != null) {
+                    authorize.setHeaders(call.argument("authHeaders")!!)
+                }
+                options.channelAuthorizer = authorize
+                // HttpChannelAuthorizer(call.argument("authEndpoint"))
+            }
             if (call.argument<String>("authorizer") != null) options.channelAuthorizer = this
             if (call.argument<String>("proxy") != null) {
                 val (host, port) = call.argument<String>("proxy")!!.split(':')

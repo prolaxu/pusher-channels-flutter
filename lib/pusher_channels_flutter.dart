@@ -105,6 +105,8 @@ class PusherChannelsFlutter {
     String? authEndpoint, // pusher-js only
     String? authTransport, // pusher-js only
     Map<String, Map<String, String>>? authParams, // pusher-js only
+    // auth headers
+    Map<String, String>? authHeaders, // pusher-js only
     bool? logToConsole, // pusher-js only
     Function(String currentState, String previousState)?
         onConnectionStateChange,
@@ -150,6 +152,7 @@ class PusherChannelsFlutter {
       "authEndpoint": authEndpoint,
       "authTransport": authTransport,
       "authParams": authParams,
+      "authHeaders": authHeaders,
       "logToConsole": logToConsole
     });
   }
