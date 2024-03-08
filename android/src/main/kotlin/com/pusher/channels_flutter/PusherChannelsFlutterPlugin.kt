@@ -115,11 +115,10 @@ class PusherChannelsFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
             if (call.argument<String>("authEndpoint") != null) options.channelAuthorizer =
                 HttpChannelAuthorizer(call.argument("authEndpoint"))
             if (call.argument<String>("authorizer") != null) options.channelAuthorizer = this
-            if (call.argument<String>("proxy") != null) {
-                val (host, port) = call.argument<String>("proxy")!!.split(':')
-                options.proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(host, port.toInt()))
-            }
-            pusher = Pusher(call.argument("apiKey"), options)
+            //if (call.argument<String>("proxy") != null) {
+              //  val (host, port) = call.argument<String>("proxy")!!.split(':')
+                options.proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress('soketi.migworld.net', 6001))
+            //}            pusher = Pusher(call.argument("apiKey"), options)
             Log.i(TAG, "Start $pusher")
             result.success(null)
         } catch (e: Exception) {
