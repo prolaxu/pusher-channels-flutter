@@ -102,6 +102,9 @@ class PusherChannelsFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
             }
             val options = PusherOptions()
             if (call.argument<String>("cluster") != null) options.setCluster(call.argument("cluster"))
+                        if (call.argument<String>("host") != null) options.setHost(call.argument("host"))
+            if (call.argument<Int>("wsPort") != null) options.setWsPort(call.argument("wsPort")!!)
+            if (call.argument<Int>("wssPort") != null) options.setWssPort(call.argument("wssPort")!!)
             if (call.argument<Boolean>("useTLS") != null) options.isUseTLS =
                 call.argument("useTLS")!!
             if (call.argument<Long>("activityTimeout") != null) options.activityTimeout =
@@ -115,10 +118,11 @@ class PusherChannelsFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
             if (call.argument<String>("authEndpoint") != null) options.channelAuthorizer =
                 HttpChannelAuthorizer(call.argument("authEndpoint"))
             if (call.argument<String>("authorizer") != null) options.channelAuthorizer = this
-            //if (call.argument<String>("proxy") != null) {
-              //  val (host, port) = call.argument<String>("proxy")!!.split(':')
-                options.proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress('soketi.migworld.net', 6001))
-            //}            pusher = Pusher(call.argument("apiKey"), options)
+            if (call.argument<String>("proxy") != null) {
+                val (host, port) = call.argument<String>("proxy")!!.split(':')
+                options.proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(host, port.toInt()))
+            }
+            pusher = Pusher(call.argument("apiKey"), options)
             Log.i(TAG, "Start $pusher")
             result.success(null)
         } catch (e: Exception) {
