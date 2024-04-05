@@ -167,7 +167,7 @@ describes for which platform the parameter is available:
 | ------------------------ | ------- | --- | --- |
 | activityTimeout          | ✅      | ✅  | ✅  |
 | apiKey                   | ✅      | ✅  | ✅  |
-| authParam                | ⬜️      | ⬜️ | ✅  |
+| authParam                | ✅      | ✅ | ✅  |
 | authEndpoint             | ✅      | ✅  | ✅  |
 | authTransport            | ⬜️      | ⬜️ | ✅  |
 | cluster                  | ✅      | ✅  | ✅  |
